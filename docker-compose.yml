@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: mariadb:11
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gamesloan
+      MYSQL_USER: gamesuser
+      MYSQL_PASSWORD: gamespass
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  api:
+    build:
+      context: ./games-loan-api
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__DefaultConnection: "server=db;port=3306;database=gamesloan;user=gamesuser;password=gamespass"
+      Jwt__Issuer: "GamesLoanApi"
+      Jwt__Audience: "GamesLoanApiClient"
+      Jwt__SecretKey: "a8ff26af1c267ac7067d855477fc05c0"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "7108:8080"
+
+  front:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    depends_on:
+      - api
+    ports:
+      - "8080:80"

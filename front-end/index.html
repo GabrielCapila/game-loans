@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>GamesLoan</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="app">
+    <header class="topbar">
+        <div class="logo">🎮 GamesLoan</div>
+        <div class="user-info" id="userInfo">
+            Não autenticado
+        </div>
+    </header>
+
+    <!-- LOGIN -->
+    <main id="loginView">
+       <section id="authSection" class="card auth-card">
+            <div class="auth-header">
+                <h2>Autenticação</h2>
+                <p>Acesse sua biblioteca de jogos e empréstimos.</p>
+            </div>
+
+            <!-- Abas -->
+            <div class="auth-tabs">
+                <button type="button"
+                        class="auth-tab active"
+                        data-target="loginForm">
+                Entrar
+                </button>
+                <button type="button"
+                        class="auth-tab"
+                        data-target="registerForm">
+                Criar conta
+                </button>
+            </div>
+
+            <div class="auth-content">
+                <!-- LOGIN -->
+                <form id="loginForm" class="auth-panel active" autocomplete="off">
+                <label for="loginUsername">Usuário</label>
+                <input type="text" id="loginUsername" required />
+
+                <label for="loginPassword">Senha</label>
+                <input type="password" id="loginPassword" required />
+
+                <button type="submit" class="primary-btn full">Entrar</button>
+                <p id="loginError" class="error-msg"></p>
+                </form>
+
+                <!-- CADASTRO -->
+                <form id="registerForm" class="auth-panel" autocomplete="off">
+                <label for="registerUsername">Usuário</label>
+                <input type="text" id="registerUsername" required />
+
+                <label for="registerPassword">Senha</label>
+                <input type="password" id="registerPassword" required />
+
+                <label for="registerPasswordConfirm">Confirmar senha</label>
+                <input type="password" id="registerPasswordConfirm" required />
+
+                <button type="submit" class="primary-btn full">Cadastrar</button>
+                <p id="registerMessage" class="success-msg"></p>
+                <p id="registerError" class="error-msg"></p>
+                </form>
+            </div>
+            </section>
+    </main>
+
+    <!-- APLICAÇÃO -->
+    <main id="mainView" class="hidden">
+        <nav class="tabs">
+            <button data-tab="friendsTab" class="tab active">Amigos</button>
+            <button data-tab="gamesTab" class="tab">Jogos</button>
+            <button data-tab="loansTab" class="tab">Empréstimos</button>
+            <button id="logoutBtn" class="tab logout">Sair</button>
+        </nav>
+
+        <!-- DASHBOARD -->
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Amigos cadastrados</div>
+                <div class="stat-value" id="statFriends">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Jogos cadastrados</div>
+                <div class="stat-value" id="statGames">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Empréstimos ativos</div>
+                <div class="stat-value" id="statLoans">0</div>
+            </div>
+        </section>
+
+        <!-- AMIGOS -->
+        <section id="friendsTab" class="tab-content">
+            <div class="grid">
+                <div class="card">
+                    <h2>Cadastrar amigo</h2>
+                    <form id="createFriendForm">
+                        <input type="hidden" id="friendIdEditing" value="" />
+
+                        <label>
+                            Nome
+                            <input type="text" id="friendName" required />
+                        </label>
+                        <label>
+                            E-mail
+                            <input type="email" id="friendEmail" required />
+                        </label>
+                        <label>
+                            Telefone
+                            <input type="text" id="friendPhone" required placeholder="(31) 99999-9999" />
+                        </label>
+                        <button type="submit" id="friendSubmitBtn">Salvar amigo</button>
+                    </form>
+                    <div id="friendCreateMessage" class="success"></div>
+                    <div id="friendCreateError" class="error"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Lista de amigos</h2>
+                        <button id="reloadFriendsBtn">Recarregar</button>
+                    </div>
+                    <table class="data-table" id="friendsTable">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Ações</th>
+                            </tr>
+                            </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="pagination" id="friendsPagination"></div>
+                    <div id="friendsError" class="error"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- JOGOS -->
+        <section id="gamesTab" class="tab-content hidden">
+            <div class="grid">
+                <div class="card">
+                    <h2>Cadastrar jogo</h2>
+                    <form id="createGameForm">
+                        <label>
+                            Nome do jogo
+                            <input type="text" id="gameName" required />
+                        </label>
+                        <label>
+                            Plataforma
+                            <input type="text" id="gamePlatform" placeholder="PS5, Xbox, PC..." />
+                        </label>
+                        <label>
+                            Gênero(s)
+                            <input type="text" id="gameGenres" required placeholder="Ação, RPG" />
+                        </label>
+                        <label>
+                            Publicadora(s)
+                            <input type="text" id="gamePublishers" required placeholder="Sony, Bandai..." />
+                        </label>
+                        <button type="submit">Salvar jogo</button>
+                    </form>
+                    <div id="gameCreateMessage" class="success"></div>
+                    <div id="gameCreateError" class="error"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Lista de jogos</h2>
+                        <button id="reloadGamesBtn">Recarregar</button>
+                    </div>
+                    <table class="data-table" id="gamesTable">
+                        <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Plataforma</th>
+                            <th>Gênero</th>
+                            <th>Emprestado</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="pagination" id="gamesPagination"></div>
+                    <div id="gamesError" class="error"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EMPRÉSTIMOS -->
+        <section id="loansTab" class="tab-content hidden">
+            <div class="grid">
+                <div class="card">
+                    <h2>Criar empréstimo</h2>
+                    <form id="createLoanForm">
+                        <label>
+                            Amigo
+                            <select id="loanFriendSelect" required></select>
+                        </label>
+                        <label>
+                            Jogo
+                            <select id="loanGameSelect" required></select>
+                        </label>
+                        <label>
+                            Data prevista de devolução
+                            <input type="date" id="loanExpectedReturn" required />
+                        </label>
+                        <button type="submit" id="loanSubmitBtn">Emprestar jogo</button>
+                        <p class="hint" id="loanEditHint" style="display:none; margin-top:4px;">
+                            Editando empréstimo. Altere a data prevista e clique em "Atualizar empréstimo".
+                        </p>
+                        <button type="button" id="loanCancelEditBtn" class="small-btn" style="display:none; margin-top:4px;">
+                            Cancelar edição
+                        </button>
+                    </form>
+                    <div id="loanCreateMessage" class="success"></div>
+                    <div id="loanError" class="error"></div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Empréstimos ativos</h2>
+                        <button id="reloadLoansBtn">Recarregar</button>
+                    </div>
+                    <table class="data-table" id="loansTable">
+                        <thead>
+                        <tr>
+                            <th>Amigo</th>
+                            <th>Jogo</th>
+                            <th>Data empréstimo</th>
+                            <th>Previsto</th>
+                            <th>Ação</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="pagination" id="loansPagination"></div>
+                    <div id="loansError" class="error"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
