@@ -30,7 +30,6 @@ public sealed class UpdateLoanCommandHandler
 
         loan.UpdateExpectedReturnDate(request.ExpectedReturnDate);
 
-        // 4. persiste
         await _loanRepo.UpdateAsync(loan, cancellationToken);
 
         return new LoanUpdatedDto

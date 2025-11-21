@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamesLoan.Api.Controllers;
 
+/// <summary>
+/// Operações relacionadas a amigos (Friend).
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -24,7 +27,13 @@ public class FriendsController : ControllerBase
         _mediator = mediator;
     }
 
-    // POST api/friends
+    /// <summary>
+    /// Cria um novo amigo.
+    /// </summary>
+    /// <param name="request">Dados do amigo (nome, email, telefone).</param>
+    /// <returns>Location com o id do recurso criado.</returns>
+    /// <response code="201">Amigo criado com sucesso.</response>
+    /// <response code="409">E-mail já existente ou dados inválidos.</response>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateFriendRequest request)
     {
@@ -35,7 +44,11 @@ public class FriendsController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id }, null);
     }
 
-    // GET api/friends
+    /// <summary>
+    /// Retorna todos os amigos.
+    /// </summary>
+    /// <returns>Lista de amigos.</returns>
+    /// <response code="200">Lista retornada.</response>
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<FriendDto>>> GetAll()
     {
@@ -43,7 +56,13 @@ public class FriendsController : ControllerBase
         return Ok(friends);
     }
 
-    // GET api/friends/5
+    /// <summary>
+    /// Retorna um amigo pelo id.
+    /// </summary>
+    /// <param name="id">Id do amigo.</param>
+    /// <returns>Dados do amigo.</returns>
+    /// <response code="200">Amigo encontrado.</response>
+    /// <response code="404">Amigo não encontrado.</response>
     [HttpGet("{id:int}")]
     public async Task<ActionResult<FriendDto>> GetById(int id)
     {
@@ -55,7 +74,14 @@ public class FriendsController : ControllerBase
         return Ok(friend);
     }
 
-    // PUT api/friends/5
+    /// <summary>
+    /// Atualiza dados de um amigo.
+    /// </summary>
+    /// <param name="id">Id do amigo.</param>
+    /// <param name="request">Novos dados.</param>
+    /// <returns>No content.</returns>
+    /// <response code="204">Atualizado com sucesso.</response>
+    /// <response code="404">Amigo não encontrado.</response>
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateFriendRequest request)
     {
@@ -69,7 +95,13 @@ public class FriendsController : ControllerBase
         return NoContent();
     }
 
-    // DELETE api/friends/5
+    /// <summary>
+    /// Remove (soft-delete) um amigo.
+    /// </summary>
+    /// <param name="id">Id do amigo.</param>
+    /// <returns>No content.</returns>
+    /// <response code="204">Removido com sucesso.</response>
+    /// <response code="404">Amigo não encontrado.</response>
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id)
     {

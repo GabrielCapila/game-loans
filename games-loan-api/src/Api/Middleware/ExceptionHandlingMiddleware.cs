@@ -24,11 +24,25 @@ public class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
+        catch (DomainException ex)
+        {
+            _logger.LogWarning(ex.Message, "Domain error");
+            await HandleExceptionAsync(context,  ex);
+        }
+        catch (UnauthorizedException ex)
+        {
+            _logger.LogWarning(ex.Message,"Unauthorized");
+            await HandleExceptionAsync(context,  ex);
+        }
+        catch (NotFoundException ex)
+        {
+            _logger.LogWarning(ex.Message,"Not found");
+            await HandleExceptionAsync(context,  ex);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Unhandled exception");
-
-            await HandleExceptionAsync(context, ex);
+            await HandleExceptionAsync(context,  ex);
         }
     }
 

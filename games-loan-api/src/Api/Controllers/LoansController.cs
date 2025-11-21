@@ -12,6 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GamesLoan.Api.Controllers;
 
+/// <summary>
+/// Operações relacionadas a empréstimos (Loan).
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -24,6 +27,14 @@ public class LoansController : ControllerBase
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Cria um novo empréstimo de jogo para um amigo.
+    /// </summary>
+    /// <param name="request">Dados do empréstimo (FriendId, GameId, ExpectedReturnDate).</param>
+    /// <returns>Informações do empréstimo criado.</returns>
+    /// <response code="201">Empréstimo criado.</response>
+    /// <response code="404">Amigo ou Jogo não encontrados.</response>
+    /// <response code="409">Regra de domínio violada (ex: jogo já emprestado).</response>
     [HttpPost]
     public async Task<ActionResult<LoanCreatedDto>> Create([FromBody] CreateLoanRequest request)
     {
@@ -36,6 +47,14 @@ public class LoansController : ControllerBase
         return CreatedAtAction(nameof(GetAll), new { }, result);
     }
 
+    /// <summary>
+    /// Registra a devolução de um empréstimo.
+    /// </summary>
+    /// <param name="loanId">Id do empréstimo.</param>
+    /// <returns>Informações da devolução.</returns>
+    /// <response code="200">Devolução registrada.</response>
+    /// <response code="404">Empréstimo/Jogo/Amigo não encontrados.</response>
+    /// <response code="409">Regra de domínio violada (ex: empréstimo já devolvido).</response>
     [HttpPost("{loanId:int}/return")]
     public async Task<ActionResult<LoanReturnResultDto>> Return(int loanId)
     {
@@ -43,6 +62,12 @@ public class LoansController : ControllerBase
         return Ok(result);
     }
 
+    /// <summary>
+    /// Lista todos os empréstimos (opcional apenas ativos).
+    /// </summary>
+    /// <param name="onlyActive">Se true, retorna apenas empréstimos abertos.</param>
+    /// <returns>Lista de empréstimos.</returns>
+    /// <response code="200">Lista retornada.</response>
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<LoanDetailsDto>>> GetAll([FromQuery] bool onlyActive = false)
     {
@@ -50,6 +75,13 @@ public class LoansController : ControllerBase
         return Ok(loans);
     }
 
+    /// <summary>
+    /// Lista empréstimos de um amigo específico.
+    /// </summary>
+    /// <param name="friendId">Id do amigo.</param>
+    /// <returns>Lista de empréstimos do amigo.</returns>
+    /// <response code="200">Lista retornada.</response>
+    /// <response code="404">Amigo não encontrado.</response>
     [HttpGet("by-friend/{friendId:int}")]
     public async Task<ActionResult<IReadOnlyList<LoanDetailsDto>>> GetByFriend(int friendId)
     {
@@ -57,6 +89,15 @@ public class LoansController : ControllerBase
         return Ok(loans);
     }
 
+    /// <summary>
+    /// Atualiza a data de devolução prevista de um empréstimo.
+    /// </summary>
+    /// <param name="id">Id do empréstimo.</param>
+    /// <param name="request">Nova data prevista.</param>
+    /// <returns>Dados atualizados.</returns>
+    /// <response code="200">Atualização realizada.</response>
+    /// <response code="404">Empréstimo não encontrado.</response>
+    /// <response code="409">Regra de domínio violada.</response>
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Update(
     int id,

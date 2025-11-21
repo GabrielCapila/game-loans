@@ -8,6 +8,9 @@
     <AssemblyName>GamesLoan.Api</AssemblyName>
     <UserSecretsId>5749a3a9-bcb2-4d56-8474-31a1735a1915</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\GamesLoan.Api.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

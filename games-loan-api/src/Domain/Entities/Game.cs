@@ -37,6 +37,16 @@ public record Game
         Name = name.Trim();
     }
 
+    public void SetPublishers(List<string>? publishers)
+    {
+        Publishers = publishers?.Where(p => !string.IsNullOrWhiteSpace(p)).Select(p => p.Trim()).ToList();
+    }
+
+    public void SetGenre(List<string>? genre)
+    {
+        Genre = genre?.Where(g => !string.IsNullOrWhiteSpace(g)).Select(g => g.Trim()).ToList();
+    }
+
     public void MarkAsLoaned()
     {
         if (IsLoaned)

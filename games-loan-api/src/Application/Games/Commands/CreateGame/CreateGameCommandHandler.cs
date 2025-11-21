@@ -23,7 +23,6 @@ public class CreateGameCommandHandler : IRequestHandler<CreateGameCommand, int>
         var publisher = req.Publishers.FirstOrDefault();
         var genre = req.Genre.FirstOrDefault();
 
-        // Usa o modelo atual da entidade Game
         var game = new Game(
             name: req.Name,
             publishers: new List<string> { publisher },
