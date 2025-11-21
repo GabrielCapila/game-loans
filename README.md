@@ -1,4 +1,4 @@
-# Orquestração Docker - GamesLoan
+# Estrutura Desafio BTG - GamesLoan 
 
 Este README descreve como subir todo o ecossistema (Banco, API .NET e Front‑end) usando `docker-compose`.
 
