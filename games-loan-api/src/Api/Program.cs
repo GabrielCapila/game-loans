@@ -86,9 +86,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
-
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())

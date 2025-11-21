@@ -10,5 +10,10 @@ public interface IGameRepository : IBaseRepository<Game>
 {
     // Para evitar duplicar carga da API externa
     Task<Game?> GetByExternalSourceIdAsync(string externalSourceId, CancellationToken cancellationToken = default);
+    Task<HashSet<string>> GetExistingExternalSourceIdsAsync(
+        IEnumerable<string> externalSourceIds,
+        CancellationToken cancellationToken = default);
+
+    Task AddRangeAsync(IEnumerable<Game> games, CancellationToken cancellationToken = default);
 
 }

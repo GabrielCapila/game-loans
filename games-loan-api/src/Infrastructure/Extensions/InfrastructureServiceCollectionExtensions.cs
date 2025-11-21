@@ -9,6 +9,7 @@ using GamesLoan.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +25,21 @@ public static class InfrastructureServiceCollectionExtensions
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection")
             ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-       
+
         services.AddDbContext<GamesLoanDbContext>(options =>
-            options.UseMySql(
-                connectionString,
-                ServerVersion.AutoDetect(connectionString)
-            ));
- 
-        services.AddScoped<IFriendRepository, FriendRepository>();
+        {
+            options
+           .UseMySql(
+               connectionString,
+               ServerVersion.AutoDetect(connectionString))
+           .EnableSensitiveDataLogging(false)
+           .EnableDetailedErrors(true)
+           .LogTo(Console.WriteLine, LogLevel.Error);
+        });
+
+
+
+    services.AddScoped<IFriendRepository, FriendRepository>();
         services.AddScoped<IGameRepository, GameRepository>();
         services.AddScoped<ILoanRepository, LoanRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -42,7 +50,7 @@ public static class InfrastructureServiceCollectionExtensions
         services.AddHttpClient("PlaystationApi", client =>
         {
             client.BaseAddress = new Uri("https://api.sampleapis.com/playstation/");
-            client.Timeout = TimeSpan.FromSeconds(15);
+    client.Timeout = TimeSpan.FromSeconds(15);
         });
 
         return services;
